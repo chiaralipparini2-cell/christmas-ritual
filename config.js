@@ -5,8 +5,8 @@
 // NON incollare mai la "service_role key".
 // ============================================================
 window.ADRIA = {
-  SUPABASE_URL: 'INCOLLA_QUI_PROJECT_URL',
-  SUPABASE_ANON_KEY: 'INCOLLA_QUI_ANON_KEY',
+  SUPABASE_URL: 'https://mhspunclkxsnjyvxkgjd.supabase.co',
+  SUPABASE_ANON_KEY: 'sb_publishable_DDGOImqbPeEWzvbhe97k2g_RdkYvRMD',
   CONTACT_EMAIL: 'info@adriabeachwear.com',
   SITE_NAME: 'adriabeachwear.com',   // scritta in basso nella scheda da condividere
   YEAR: 2026
