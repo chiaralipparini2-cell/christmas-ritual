@@ -5,7 +5,7 @@
   const session = data && data.session;
   if (!session) { location.replace('index.html'); return; }
 
-  $('#mailus').href = 'mailto:' + cfg.CONTACT_EMAIL;
+  $('#mailus').href = 'https://wa.me/' + cfg.WHATSAPP; $('#mailus').target = '_blank'; $('#mailus').rel = 'noopener';
   $('#logout').onclick = async () => { await sb.auth.signOut(); location.replace('index.html'); };
 
   let cal = null;
@@ -70,14 +70,13 @@
 
   function claimLabel(p) { return p.fulfilment === 'salotto' ? 'Prenota il tuo Salotto' : p.category === 'premio' ? 'Richiedi il regalo' : 'Richiedi la sorpresa'; }
 
-  function mailtoFor(box) {
-    const p = box.prize, date = fmtDate(cal.start_date, box.day), nl = '\r\n';
-    let body = 'Ciao Adria,' + nl + 'ho aperto la casella del ' + date + ' del Calendario dell’Avvento e ho trovato: ' + p.title + '.' + nl + nl +
-      'Il mio codice: ' + box.claim_code + nl + 'Nome e cognome: ' + (cal.nome || '') + nl + 'Email: ' + session.user.email + nl;
-    if (p.fulfilment === 'spedizione') body += nl + 'Indirizzo di spedizione (via, numero, CAP, città, provincia):' + nl + nl + 'Telefono:' + nl + nl + 'So che la spedizione è a mio carico.' + nl;
-    if (p.fulfilment === 'salotto') body += nl + 'Città e provincia:' + nl + 'Giorni e orari che preferisco per il Salotto:' + nl + 'Telefono:' + nl;
-    body += nl + 'Grazie!';
-    return { subject: 'Calendario dell’Avvento · ' + p.title + ' · ' + box.claim_code, body };
+  function messageFor(box) {
+    const p = box.prize, date = fmtDate(cal.start_date, box.day), nl = '\n';
+    let t = 'Ciao Adria! Ho aperto la casella del ' + date + ' del Calendario dell’Avvento e ho trovato: ' + p.title + '.' + nl + nl +
+      'Il mio codice: ' + box.claim_code + nl + 'Nome: ' + (cal.nome || '') + nl + 'Email: ' + session.user.email + nl;
+    if (p.fulfilment === 'spedizione') t += nl + 'Indirizzo di spedizione (via, numero, CAP, città, provincia):' + nl + nl + 'Telefono:' + nl + nl + 'So che la spedizione è a mio carico.' + nl;
+    if (p.fulfilment === 'salotto') t += nl + 'Città e provincia:' + nl + 'Giorni e orari che preferisco per il Salotto:' + nl;
+    return t;
   }
 
   async function copy(text) {
@@ -98,9 +97,9 @@
         if (box.fulfilled) claim = '<p class="note">Adria ha preso in carico la tua richiesta. Grazie!</p>';
         else if (box.claim_started) claim =
           '<div class="code"><small>Il tuo codice</small><strong>' + esc(box.claim_code) + '</strong></div>' +
-          '<div class="row"><button class="btn gold small" id="reopen">Riapri l’email</button><button class="btn ghost small" id="copytext">Copia il testo</button></div>' +
-          '<p class="note" id="claimnote">Invia l’email a ' + esc(cfg.CONTACT_EMAIL) + ' con il codice: ci pensiamo noi. Se non si è aperta l’app di posta, copia il testo e incollalo in una nuova email.</p>';
-        else claim = '<button class="btn gold" id="claim">' + esc(claimLabel(p)) + '</button><p class="note">Si aprirà la tua email già pronta, con un codice personale. Devi solo inviarla.</p>';
+          '<div class="row"><button class="btn gold small" id="reopen">Riapri WhatsApp</button><button class="btn ghost small" id="copytext">Copia il testo</button></div>' +
+          '<p class="note" id="claimnote">Invia il messaggio al WhatsApp di Adria (' + esc(cfg.WHATSAPP_LABEL) + ') con il codice: ci pensiamo noi. Se WhatsApp non si è aperto, copia il testo e incollalo in una chat con questo numero.</p>';
+        else claim = '<button class="btn gold" id="claim">' + esc(claimLabel(p)) + '</button><p class="note">Si aprirà WhatsApp con un messaggio già pronto e un codice personale. Devi solo inviarlo.</p>';
       }
       prize = '<div class="orn"></div><div class="prize"><p class="kicker">' + kicker + '</p>' +
         (p.image_url ? '<img src="' + esc(p.image_url) + '" alt="' + esc(p.title) + '">' : '') +
@@ -128,19 +127,17 @@
       box.claim_started = true;
       const idx = cal.boxes.findIndex((b) => b.day === box.day); cal.boxes[idx] = box;
       showModal(box, true);
-      openMail(box);
+      openWhatsApp(box);
     };
-    const re = $('#reopen'); if (re) re.onclick = () => openMail(box);
+    const re = $('#reopen'); if (re) re.onclick = () => openWhatsApp(box);
     const ct = $('#copytext'); if (ct) ct.onclick = async () => {
-      const m = mailtoFor(box);
-      const ok = await copy('A: ' + cfg.CONTACT_EMAIL + '\n' + 'Oggetto: ' + m.subject + '\n\n' + m.body);
-      $('#claimnote').textContent = ok ? 'Testo copiato. Incollalo in una nuova email e invialo a ' + cfg.CONTACT_EMAIL + '.' : 'Non riesco a copiare: scrivi a ' + cfg.CONTACT_EMAIL + ' indicando il codice ' + box.claim_code + '.';
+      const ok = await copy(messageFor(box));
+      $('#claimnote').textContent = ok ? 'Testo copiato. Incollalo in una chat WhatsApp con il numero ' + cfg.WHATSAPP_LABEL + ' e inviarlo.' : 'Non riesco a copiare: scrivi al WhatsApp ' + cfg.WHATSAPP_LABEL + ' indicando il codice ' + box.claim_code + '.';
     };
   }
 
-  function openMail(box) {
-    const m = mailtoFor(box);
-    location.href = 'mailto:' + cfg.CONTACT_EMAIL + '?subject=' + encodeURIComponent(m.subject) + '&body=' + encodeURIComponent(m.body);
+  function openWhatsApp(box) {
+    location.href = 'https://wa.me/' + cfg.WHATSAPP + '?text=' + encodeURIComponent(messageFor(box));
   }
 
   // ---------------- scheda condivisibile (1080x1350) ----------------

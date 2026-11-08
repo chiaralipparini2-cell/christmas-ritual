@@ -20,8 +20,8 @@
 
   const showErr = (el, e) => { el.innerHTML = '<div class="msg err">' + esc(friendly(e)) + '</div>'; };
   const validEmail = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
-  $('#forgot').href = 'mailto:' + window.ADRIA.CONTACT_EMAIL + '?subject=' + encodeURIComponent('Password dimenticata - Calendario dell’Avvento') +
-    '&body=' + encodeURIComponent('Ciao Adria, ho dimenticato la password del calendario. La mia email è: ');
+  $('#forgot').href = 'https://wa.me/' + window.ADRIA.WHATSAPP + '?text=' + encodeURIComponent('Ciao Adria, ho dimenticato la password del calendario. La mia email è: ');
+  $('#forgot').target = '_blank'; $('#forgot').rel = 'noopener';
 
   $('#f-reg').addEventListener('submit', async (ev) => {
     ev.preventDefault();
