@@ -39,7 +39,7 @@
     $('#grid').innerHTML = cal.boxes.map((b) => {
       const date = fmtDate(cal.start_date, b.day);
       if (b.opened) {
-        const tag = b.prize ? TAGS[b.prize.category] : 'Frase';
+        const tag = b.prize ? (b.expired ? 'Scaduto' : TAGS[b.prize.category]) : 'Frase';
         return '<button class="tile opened" data-day="' + b.day + '" aria-label="Casella del ' + date + ', aperta"><span class="n">' + b.day + '</span><span class="tag">' + tag + '</span></button>';
       }
       if (b.day <= cal.today_day) {
@@ -68,6 +68,7 @@
   function close() { $('#modal').innerHTML = ''; document.body.style.overflow = ''; }
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
 
+  const fmtLong = (iso) => new Date(iso).toLocaleDateString('it-IT', { day: 'numeric', month: 'long' });
   function claimLabel(p) { return p.fulfilment === 'salotto' ? 'Prenota il tuo Salotto' : p.category === 'premio' ? 'Richiedi il regalo' : 'Richiedi la sorpresa'; }
 
   function messageFor(box) {
@@ -95,15 +96,18 @@
       let claim = '';
       if (p.claimable) {
         if (box.fulfilled) claim = '<p class="note">Adria ha preso in carico la tua richiesta. Grazie!</p>';
+        else if (box.expired) claim = '<p class="note">Il tempo per richiedere questo regalo è finito, ed è tornato disponibile per altre clienti.</p>';
         else if (box.claim_started) claim =
           '<div class="code"><small>Il tuo codice</small><strong>' + esc(box.claim_code) + '</strong></div>' +
           '<div class="row"><button class="btn gold small" id="reopen">Riapri WhatsApp</button><button class="btn ghost small" id="copytext">Copia il testo</button></div>' +
           '<p class="note" id="claimnote">Invia il messaggio al WhatsApp di Adria (' + esc(cfg.WHATSAPP_LABEL) + ') con il codice: ci pensiamo noi. Se WhatsApp non si è aperto, copia il testo e incollalo in una chat con questo numero.</p>';
-        else claim = '<button class="btn gold" id="claim">' + esc(claimLabel(p)) + '</button><p class="note">Si aprirà WhatsApp con un messaggio già pronto e un codice personale. Devi solo inviarlo.</p>';
+        else claim = '<button class="btn gold" id="claim">' + esc(claimLabel(p)) + '</button><p class="note">Si aprirà WhatsApp con un messaggio già pronto e un codice personale. Devi solo inviarlo.' + (box.expires_at ? ' Hai tempo fino al ' + fmtLong(box.expires_at) + '.' : '') + '</p>';
       }
       prize = '<div class="orn"></div><div class="prize"><p class="kicker">' + kicker + '</p>' +
         (p.image_url ? '<img src="' + esc(p.image_url) + '" alt="' + esc(p.title) + '">' : '') +
-        '<h3>' + esc(p.title) + '</h3><p>' + esc(p.body) + '</p>' + claim + '</div>';
+        '<h3>' + esc(p.title) + '</h3><p>' + esc(p.body) + '</p>' +
+        (/^https?:\/\//.test(p.link_url || '') ? '<a class="btn ghost" style="margin-top:14px" href="' + esc(p.link_url) + '" target="_blank" rel="noopener">Vedi sul sito</a>' : '') +
+        claim + '</div>';
     } else {
       prize = '<p class="only-frase">Oggi il regalo è questo pensiero. Domani, una nuova sorpresa.</p>';
     }
