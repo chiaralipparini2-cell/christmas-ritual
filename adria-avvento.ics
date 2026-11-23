@@ -1,0 +1,22 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Adria Beachwear//Avvento 2026//IT
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Calendario dell Avvento Adria
+BEGIN:VEVENT
+UID:adria-avvento-2026@adriabeachwear.com
+DTSTAMP:20261122T080000Z
+DTSTART:20261201T080000Z
+DTEND:20261201T081500Z
+RRULE:FREQ=DAILY;COUNT=25
+SUMMARY:Apri la tua casella Adria
+DESCRIPTION:La tua casella di oggi ti aspetta: https://chiaralipparini2-cell.github.io/christmas-ritual/calendar.html
+URL:https://chiaralipparini2-cell.github.io/christmas-ritual/calendar.html
+BEGIN:VALARM
+TRIGGER:PT0M
+ACTION:DISPLAY
+DESCRIPTION:Apri la tua casella Adria
+END:VALARM
+END:VEVENT
+END:VCALENDAR

@@ -1,0 +1,16 @@
+{
+  "name": "Adria Beachwear · Calendario dell'Avvento",
+  "short_name": "Adria Avvento",
+  "description": "Ogni giorno di dicembre una casella da aprire.",
+  "lang": "it",
+  "start_url": "./calendar.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f7f2ea",
+  "theme_color": "#581223",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

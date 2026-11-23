@@ -105,3 +105,15 @@ input:focus,select:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(176,
 .todo{background:#fff1b8;padding:0 3px}
 .doc h2{font-family:var(--serif);font-weight:500;font-size:24px;margin:28px 0 6px}
 .doc p,.doc li{font-size:15px}
+
+/* promemoria / app / notifiche */
+.remind{margin-top:26px;text-align:center}
+.remind h3{font-family:var(--serif);font-weight:500;font-size:24px;margin:0 0 2px}
+.remind .rm-sub{margin:0 0 14px;font-size:13px;color:var(--muted)}
+.remind .btn{display:block;margin:10px auto 0;width:auto;max-width:100%}
+.remind .rm-ok{margin:0 0 6px;color:var(--ink-2);font-size:14px}
+.remind .rm-note,.remind .rm-msg{margin:12px 0 0;font-size:13px;line-height:1.5;color:var(--muted)}
+.remind .rm-msg{color:var(--ink-2)}
+.remind .btn:not(.ghost){background:var(--bordeaux);border-color:var(--bordeaux)}
+.remind .btn:not(.ghost):hover{background:#6d1a2e}
+.remind .btn.ghost{border-color:var(--bordeaux);color:var(--bordeaux)}
