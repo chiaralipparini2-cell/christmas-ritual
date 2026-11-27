@@ -22,13 +22,14 @@
     if (/email not confirmed/i.test(m)) return 'Devi prima confermare la tua email.';
     if (/invalid.*email|email.*invalid/i.test(m)) return 'Controlla l’indirizzo email: non sembra corretto.';
     if (/giorno giusto/i.test(m)) return 'Questa casella non si può ancora aprire.';
+    if (/iniziativa conclusa/i.test(m)) return 'L’iniziativa si è conclusa. Grazie per aver partecipato!';
     if (/privacy/i.test(m)) return 'Per entrare serve accettare l’informativa privacy: torna alla registrazione.';
     if (/non autorizzata/i.test(m)) return 'Questo account non è autorizzato.';
     return 'Qualcosa non ha funzionato. Riprova tra poco.';
   };
 
   window.configMissing = () =>
-    '<div class="card"><div class="msg err"><b>Sito non ancora collegato al database.</b><br>Apri <code>assets/config.js</code> e incolla l’URL e la chiave pubblica di Supabase (vedi LEGGIMI.md).</div></div>';
+    '<div class="card"><div class="msg err"><b>Sito non ancora collegato al database.</b><br>Apri <code>config.js</code> e incolla l’URL e la chiave pubblica di Supabase (vedi LEGGIMI.md).</div></div>';
 
   window.brandHtml = () =>
     '<div class="brand"><div class="name">ADRIA</div><div class="sub">Beachwear</div></div>';
